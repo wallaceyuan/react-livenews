@@ -1,0 +1,356 @@
+@charset "utf-8";
+/* CSS Document */
+body,p,input,h1,h2,h3,h4,h5,h6,ul,li,dl,dt,dd,form{margin:0;padding:0;list-style:none;vertical-align:middle;}
+h1,h2,h3,h4,h5,h6,strong,em{font-weight:normal;font-style:normal;}
+img{border:0;}
+a{text-decoration:none;}
+html{font-size:100%;}
+body{margin:0 auto;background:#fefefe;background-color:white;color:#111;font:normal 16px/1.5 'XinGothic-SinaWeibo','Microsoft YaHei',helvetica,arial,sans-serif,"黑体";-webkit-user-select:none;-webkit-text-size-adjust:none;}
+a{color:#333;text-decoration:none;}
+.clearfix:after{clear:both;display:block;visibility:hidden;height:0;content:" ";font-size:0;}
+.clearfix{zoom:1;}
+p{display:block;-webkit-margin-before:0;-webkit-margin-after:0;-webkit-margin-start:0;-webkit-margin-end:0;}
+img {
+	border: 0;
+	vertical-align: middle;
+	-ms-interpolation-mode: bicubic;
+}
+.done{
+	display: none;
+}
+
+.contentWrapper{font-size: 16px;display: none;}
+#followingBallsG{position:relative;width:300px;height:23px;margin: 0 auto;top: 50%;margin-top: -12px;-webkit-transform-style:preserve-3d;-webkit-backface-visibility:hidden;-webkit-transform:translate3d(0,0,0);}
+.followingBallsG{
+background-color:#00aecd;position:absolute;top:0;left:0;width:23px;height:23px;-webkit-border-radius:12px;-webkit-animation-name:bounce_followingBallsG;-webkit-animation-duration:2s;-webkit-animation-iteration-count:infinite;-webkit-animation-direction:linear;border-radius:12px;animation-name:bounce_followingBallsG;animation-duration:2s;animation-iteration-count:infinite;animation-direction:linear;}
+#followingBallsG_1{-webkit-animation-delay:0s;animation-delay:0s;}
+#followingBallsG_2{-moz-animation-delay:0.2s;animation-delay:0.2s;}
+#followingBallsG_3{-webkit-animation-delay:0.4s;animation-delay:0.4s;}
+#followingBallsG_4{-webkit-animation-delay:0.6s;animation-delay:0.6s;}
+@-webkit-keyframes bounce_followingBallsG{
+0%{left:0px;background-color:#00aecd;}
+50%{left:277px;background-color:#FFFFFF;}
+100%{left:0px;background-color:#00aecd;}
+}
+@keyframes bounce_followingBallsG{
+0%{left:0px;background-color:#00aecd;}
+50%{left:277px;background-color:#FFFFFF;}
+100%{left:0px;background-color:#00aecd;}
+}
+.gry .headtitle,.gry .timeCollection{background:rgba(204,204,204,0.8);color:#000;}
+.gry .dot{background-color:#ff9901;}
+.gry .headtitle p{border-left:2px solid #999;color:#000;}
+
+.red .headtitle,.red .timeCollection{background: rgba(216,58,45,0.8);color:#fff;}
+.red .dot{background-color:#fff;}
+.red .headtitle p{border-left:2px solid #fff;color:#fff;}
+
+.blue .headtitle,.blue .timeCollection{background:rgba(16,42,67,0.8);color:#fff;}
+.blue .dot{background-color:#fff;}
+.blue .headtitle p{border-left:2px solid #fff;color:#fff;}
+
+.headtitle{position:relative;    padding-left: 0.925926rem;}
+.headtitle .dot{position:absolute;top:25%;left:-5px;margin-left: 0.925926rem;width:12px;height:12px;border-radius:8px;}
+.headtitle p{padding-left:7%;font:.95em/1.8em 'XinGothic-SinaWeibo','Microsoft YaHei',helvetica,arial,sans-serif,"黑体";font-weight:bolder;}
+.smalltxt{padding:.234375rem .3125rem;background-color:#fff;font-size:.375rem;}
+.smalltxt span{color:#d02424;font-weight:700;}
+.smalltxt i{color:#666;font-size:.375rem;font-style: normal;}
+.smalltxt .text{padding-left:.234375rem;}
+.blue .smalltxt .text{border-left:.078125rem solid #102a43;}
+.red .smalltxt .text{border-left:.078125rem solid #d83a31;}
+.gry .smalltxt .text{border-left:.078125rem solid #ccc;}
+.timeCollection{margin-bottom:.3125rem;padding:.15625rem .3125rem;color:#666;font-size:.34375rem;line-height:.34375rem;}
+.timeCollection.tip{position:fixed;top:0;left:0;z-index:100;display:none;margin-bottom:0;width:100%;}
+.topW{position:relative;}
+.pulldown,.pullup{display:none;padding:5px 10px;height:40px;color:#888;text-align:center;font-weight:700;font-size:14px;line-height:40px;}
+.fixeddd .roseLive_head{height:100%;}
+.fixe .pulldown{display:block;}
+.roseLive_head_con.fixeddd{position:absolute;top:0;left:0;z-index:2;padding:0;width:100%;height:5.625rem;}
+.fixeddd .videoW{width:100%;height:100%;}
+.fixeddd video{height:100%;background:#000;}
+.fixe .ul_content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+  width: 100%;
+  -webkit-transform:translateZ(0);
+  -webkit-transform:translate3d(0,0,0);
+}
+.fixe #scroller {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-tap-highlight-color: transparent;
+  -ms-transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -o-text-size-adjust: none;
+  text-size-adjust: none;
+  -webkit-transform:translateZ(0);
+  -webkit-transform:translate3d(0,0,0);
+}
+
+/*内容*/
+.list_con .content{position:relative;}
+.list_con .content:after {
+  position: absolute;
+  top: 0.425rem;
+  left: 1.421875rem;
+  width: 0.234375rem;
+  height: 0.234375rem;
+  background: #fff;
+  background-size: contain;
+  content: " ";
+  background-repeat: no-repeat;
+  transform: rotate(45deg);
+  transform:rotate(45deg);
+  -ms-transform:rotate(45deg);   /* IE 9 */
+  -moz-transform:rotate(45deg);  /* Firefox */
+  -webkit-transform:rotate(45deg); /* Safari 和 Chrome */
+  -o-transform:rotate(45deg);  /* Opera */
+}
+.topW .news{
+  position: relative;
+}
+.topW .news:after {
+    position: absolute;
+    top: -17px;
+    right: 10px;
+    width: 50px;
+    height: 40px;
+    background: url(http://skin.kankanews.com/onlive/mline/images/top.png) top right no-repeat;
+    background-size: 100%;
+    content: " ";
+    z-index: 100;
+}
+.item{position:relative;}
+.item .itemW{padding-right:.3125rem;padding-bottom:.3125rem;padding-left:1.5625rem;}
+.ul_content{background:#f6f6f6;}
+.mask{position:absolute;top:0;left:0;z-index:10000;width:100%;height:100%;background:#fff url(http://www.kankanews.com/m/2015news/2016shlh_load.gif) no-repeat center center;background-size:40%;}
+.maskload{
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 100%;
+    height: 100%;
+    background: #fff url(http://www.kankanews.com/m/2015news/2016shlh_load.gif) no-repeat;
+    background-size: 2.5rem;
+    background-position:50% 4.6875rem;
+}
+
+/*人物*/
+.item .itemW .man{position:relative;padding:0 0 .234375rem 0;}
+.item .portrait{position:absolute;top:0;left:.185185rem;width:.9375rem;height:.9375rem;border:1px solid #c7c7c7;border-radius:22px;}
+.item .portrait img{display:block;width:100%;height:100%;border-radius:22px;}
+.item .itemW .man .portrait img{width:44px;height:44px;}
+.item .itemW .man .name{
+  margin-left:.21875rem;color:#333;font:.3125rem/1.5em XinGothic-SinaWeibo,'Microsoft YaHei',helvetica,arial,sans-serif,"黑体";
+/*  margin-right: 1rem;
+*/}
+.item .itemW .man .identity{color:#d02424;font:.3125rem/1.5em XinGothic-SinaWeibo,'Microsoft YaHei',helvetica,arial,sans-serif,"黑体";}
+.item .itemW .man .time {
+/*	position: absolute;
+	bottom: .234375rem;
+	right: 0;*/
+	padding-left: .390625rem;
+/*	background: url(../images/clock.png) center left no-repeat;
+	background-size: .28125rem .28125rem;*/
+	color: #666;
+	font-size: .3125rem;
+	float: right;
+}
+.item .itemW .place{position:relative;padding-top:10px;padding-bottom:10px;}
+.item .itemW .place i{position:absolute;top:10px;left:0;width:16px;height:21px;}
+.item .itemW .place i img{display:block;vertical-align:middle;}
+.item .itemW .place span{padding-left:25px;color:#111;font:1em/21px XinGothic-SinaWeibo,'Microsoft YaHei',helvetica,arial,sans-serif,"黑体";font-weight:bolder;line-height:21px;}
+.item .itemW .news{padding:.3125rem;background-color:#fff;}
+.list_con .title{font:.395rem/1.5em XinGothic-SinaWeibo,'Microsoft YaHei',helvetica,arial,sans-serif,"黑体";font-weight:700;}
+.list_con .title a{color:#111;}
+.list_con .desc{text-align:justify;text-justify:distribute-all-lines;word-wrap:break-word;-webkit-text-align-last:left;-moz-text-align-last:left;text-align-last:left;margin-top:.15625rem;color:#666;font:.375rem/1.5em XinGothic-SinaWeibo,'Microsoft YaHei',helvetica,arial,sans-serif,"黑体";}
+.list_con .pics{margin-top:.234375rem;}
+.list_con .pics.more{overflow:hidden;width:100%;}
+.list_con .pics.more li {
+	float: left;
+	margin-right: .046875rem;
+	width: 2.46875rem;
+	height: 1.851562rem;
+	text-align: left;
+}
+.list_con .pics.one .demos-image{padding-top:75%;width:100%;height:0;background-size:100%;}
+.list_con .pics.video{width:7.5rem;height:4.21875rem;}
+.list_con .pics.video video{background:#000;}
+.list_con .pics.more li:nth-child(3n){margin-right:0;}
+.list_con .pics.more li img{width:100%;vertical-align:middle;}
+.list_con .pics.more li span{position:relative;display:flex;width:100%;height:100%;border:1px solid #efefef;background:#000;justify-content:center;align-items:center;}
+.list_con .pics.more li.pictap img{height:auto;}
+.list_con .pics.more li.pictap span{width:100%;}
+.list_con .pics.more.two li{width:3.71875rem;height:2.78125rem;}
+.list_con .pics.more.two li:nth-of-type(2){margin-right:0;}
+.list_con .pics iframe{width:100%;height:100%;}
+.list_con .pics li{
+	background: #000 url(http://skin.kankanews.com/onlive/mline/images/place.jpg) no-repeat center center;
+	background-size: cover;
+}
+/*图片展示*/
+#canvas li,ul {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    list-style: none;
+}
+/* 使得图片居中 webkit-box */
+#canvas li {
+    position: absolute;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+}
+
+#canvas li img {
+    width: 100%;
+}
+
+#canvas em {
+    position: absolute;
+    top: .22rem;
+    right: .15625rem;
+    display: block;
+    width: .9rem;
+    height: .9rem;
+    background: #000;
+    z-index: 1000;
+}
+
+#canvas em img {
+    background: 0 0;
+    width: 100%;
+}
+/* 隐藏画布外的内容 */
+#canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    max-width: 640px;
+    background: #000;
+    display: none;
+}
+
+#canvas .ctrlbar {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    z-index: 99;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    font-size: .9em;
+    line-height: 30px;
+}
+
+#canvas .ctrlbar #J-curPage,#canvas .ctrlbar #J-pageCount {
+    text-shadow: 0 1px 1px rgba(0,0,0,.35);
+}
+
+/*loading*/
+.more_btnbox{clear:both;display:block;overflow:hidden;margin-top:5px;border-top:1px solid #eaeae9;}
+.more_btn_loading{clear:both;display:none;margin:10px 6px 10px 0;text-align:center;}
+.loadingbtn{display:inline-block;overflow:hidden;margin:2px;width:20px;height:20px;background:url(http://skin.kankanews.com/onlive/mline/images/ld.gif) 0 0 no-repeat;background-position:0 100%;background-size:20px auto;vertical-align:middle;text-indent:-99em;line-height:30px;opacity:0;}
+.more_btn{clear:both;display:inline-block;margin:2px 6px 12px 0;color:#888;text-align:center;font-size:15px;line-height:15px;}
+.con_title{position:relative;margin-bottom:5px;background:url(http://skin.kankanews.com/v5/mplive/images/nav_live.png) 0 0 no-repeat;background-size:cover;}
+.con_title p{display:inline;padding:10px 5px;color:#3e3e3e;font-size:14px;}
+.con_title .state{display:inline-block;margin-left:15px;padding:5px 0;background:url(http://skin.kankanews.com/v5/mplive/images/mylive_state.png) 0 center no-repeat;text-indent:18px;}
+.con_title .ptime{margin-left:5%;cursor:pointer;}
+.con_title .ptime{margin-left:5%;cursor:pointer;}
+.con_title i{position:absolute;top:50%;display:inline-block;overflow:hidden;margin-top:-7px;margin-left:2px;width:9px;height:13px;background:url(http://skin.kankanews.com/v5/mplive/images/pai.png) no-repeat 0 0;background-size:9px 12px;vertical-align:middle;line-height:10px;}
+.con_title .ptime.order i{-webkit-transform:rotate(180deg);transform:rotate(180deg);-ms-transform:rotate(180deg);-os-transform:rotate(180deg);}
+.video.before p::after{position:absolute;top:50%;left:50%;display:block;margin:-27px 0 0 -27px;width:55px;height:58px;background:url(http://skin.kankanews.com/onlive/mline/images/video.png) no-repeat;background-size:55px auto;content:"";cursor:pointer;}
+.video p{position:relative;height:100%;background:#000;background-size:100% 100%;}
+.outlink a{display:inline-block;margin-top:10px;margin-right:10px;color:#555;text-decoration:underline;font:.3125rem/1.5em XinGothic-SinaWeibo,'Microsoft YaHei',helvetica,arial,sans-serif,"黑体";}
+.title a i{margin-left:10px;}
+.title a i img{background:0 0;}
+.ui-newstips-wrap{text-align:center;}
+.ui-newstips{position:relative;display:-webkit-inline-box;padding-right:25px;padding-left:15px;height:40px;border-radius:5px;background:#383939;color:#fff;font-size:14px;line-height:40px;-webkit-box-align:center;}
+.ui-newstips i{display:block;margin-right:10px;margin-left:-5px;}
+.ui-newstips div{display:-webkit-box;overflow:hidden;height:inherit;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:1;-webkit-box-flex:1;}
+.ui-newstips .ui-badge-num{margin-right:5px;margin-left:10px;height:19px;min-width:19px;-webkit-border-radius:10px;font-size:12px;line-height:20px;}
+.ui-badge-num{display:inline-block;padding:0 6px;height:16px;-webkit-border-radius:8px;background:#f74c31;background-clip:padding-box;color:#fff;text-align:center;font-size:11px;line-height:16px;-webkit-background-clip:padding-box;}
+.tipBand{position:absolute;top:-.3125rem;left:25%;display:none;width:50%;height:.78125rem;border-radius:43px;color:#2D2B2B;text-align:center;line-height:.78125rem;}
+.poster {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.poster img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background: black;
+}
+.playbut {
+    position: absolute;
+    width: 0.9375rem;
+    height: 0.9375rem;
+    top: 50%;
+    left: 50%;
+    margin-top: -0.46875rem;
+    margin-left: -0.46875rem;
+    background: url(http://skin.kankanews.com/onlive/mline/images/play.png);
+    background-size: cover;
+}
+.pics.video video {
+    width: 1px;
+    height: 1px;
+    background: #000;
+    z-index: 10000;
+}
+/*弹出框*/
+@-webkit-keyframes app{0%{opacity:0;-webkit-transform:scale(.2);}
+100%{opacity:1;-webkit-transform:scale(1);}
+}
+@keyframes app{0%{opacity:0;transform:scale(.2);}
+100%{opacity:1;transform:scale(1);}
+}
+@-webkit-keyframes apps{0%{opacity:1;-webkit-transform:scale(1);}
+100%{opacity:0;-webkit-transform:scale(.2);}
+}
+@keyframes apps{0%{opacity:1;transform:scale(1);}
+100%{opacity:0;transform:scale(.2);}
+}
+
+@media (min-width:640px) {
+/*.news .title{font-weight:700;font-size:1.2em;line-height:1.5em;}
+.item .itemW .man{padding:1% 0 2% 0;}
+.list_con .pics.more{margin-top:0;width:100%;}
+.list_con .pics.more li{float:left;overflow:hidden;margin:6px 6px 0 0;width:160px;height:122px;_display:inline;}*/
+}
+@media (max-height:500px) {
+/*.list_con .title{font:1em/1.5em 'XinGothic-SinaWeibo','Microsoft YaHei',helvetica,arial,sans-serif,"黑体";font-weight:700;}
+.list_con .desc{margin-top:10px;font:.9em/1.5em 'XinGothic-SinaWeibo','Microsoft YaHei',helvetica,arial,sans-serif,"黑体";}*/
+}
