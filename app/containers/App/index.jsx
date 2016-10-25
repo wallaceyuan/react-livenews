@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { MyComponent , Header, TimeBar, Content } from '../../components';
+import {Header, TimeBar, Content } from '../../components';
 
 import fuc from '../../util/helper.jsx'
-import jsonp from '../../util/jsonp.js'
 import './index.css';
 import $ from 'jquery'
-const url = 'http://api.kankanews.com/kkweb/kkstu/cast/'
 
 class Compse extends Component {
   render(){
@@ -25,8 +23,9 @@ class App extends Component {
     super(props);
   }
   state = {
-    data: '',
-    color:'blue'
+    data     : '',
+    color    :'blue',
+    newsList :[]
   }
   componentWillMount(){
     var timestamp = Date.parse(new Date());
@@ -45,17 +44,30 @@ class App extends Component {
       }
       this.setState({
         color: color,
-        data:data
+        data:data,
+        newsList:data.news.reverse()
       })
       $('.contentWrapper').addClass(color)
     });
+    fuc.test(1476829924,254).then((data)=>{
+      var olddata = this.state.newsList
+      var join = olddata.concat(data.reverse());
+        console.log('2s done')
+      /*        console.log('new data',data.reverse())
+       console.log('old data',olddata)
+       console.log('join data',join)*/
+      this.setState({
+          newsList:join
+      })
+    })
   }
   componentDidMount(){
+
     console.log('componentDidMount');
   }
   render() {
     return (
-      <Compse data={this.state.data} color={this.state.color}/>
+      <Compse data={this.state.data} color={this.state.color} newsList={this.state.newsList}/>
     )
   }
 }

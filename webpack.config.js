@@ -38,7 +38,7 @@ module.exports = {
       inline: true,
       contentBase: './build',
       port: 8080,
-      stats: { colors: true },
+      stats: { colors: true }/*,
       proxy: [
             {
               path: /^\/public\/road\/(.*)/,
@@ -46,7 +46,7 @@ module.exports = {
               rewrite: rewriteUrl('/$1\.json'),
               changeOrigin: true
             }
-        ]
+        ]*/
     },
     entry: {
       index: [
