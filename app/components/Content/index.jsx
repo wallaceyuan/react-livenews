@@ -1,9 +1,12 @@
 import React ,{Component} from 'react'
+import fuc from '../../util/helper.jsx'
 
-
-let outhtml  ='';
+let outhtml  = '';
 let linkPic  = 'http://skin.kankanews.com/onlive/mline/images/link.png';
 let journPic = 'http://skin.kankanews.com/onlive/mline/images/xiaowen.jpg'
+let loadingPic = 'http://skin.kankanews.com/onlive/mline/images/place.jpg'
+
+
 
 class ContentS extends Component {
   render(){
@@ -35,10 +38,18 @@ class ContentS extends Component {
       if(piclist.length >1){
           var pictwo = '';
           if(piclist.length == 2){pictwo = 'two';}
+          piclist.map(function(obj,i){
+            console.log(obj)
+          })
+          var style = {
+            'backgroundImage':'url({loadingPic})'
+          }
           var picontent = <div className="pics more {pictwo} clearfix">
-                            piclist.map(function(obj,i){
-                              <li><span><img className="demos-image" style="background-image: url('+b.loading+');"  data-time={data.newstime?data.newstime.split(' ')[1]:''}  data-original={obj} src="'+b.loadpic+'" /></span></li>
-                            })
+                            {
+                              piclist.map(function(obj,i){
+                                <li><span><img className="demos-image" style={style}  data-time={data.newstime?data.newstime.split(' ')[1]:''}  data-original={obj} src="'+b.loadpic+'" /></span></li>
+                              })
+                            }
                           </div>;
       }else{
           if(piclist[0]){
@@ -71,9 +82,9 @@ var html = <div className="live_list allnews" data-time={data.timestamp} data-da
                                 <span className="time">{data.newstime?data.newstime.split(' ')[1]:''}</span>
                             </div>
                             <p className="title">
-{data.titleurl?<a href="{data.titleurl}">{data.title}<i><img src={linkPic} width="16" height="16" /></i></a>:data.title}
+{data.titleurl?<a href={data.titleurl}>{data.title}<i><img src={linkPic} width="16" height="16" /></i></a>:data.title}
                             </p>
-                            {data.newstext && <div className="desc"><p>{data.newstext.replace(/\r\n/g,"<br>")}</p></div> }
+                            {data.newstext && <div className="desc"><p>{fuc.regBr(data.newstext)}</p></div> }
                             {picontent}
                             {oHtml}
                         </div>
@@ -97,7 +108,7 @@ class Content extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        console.log('componentWillReceiveProps',nextProps);
+        //console.log('componentWillReceiveProps',nextProps);
         var props    = nextProps.data.newsList
         this.setState({
             newsList: props
@@ -105,7 +116,7 @@ class Content extends Component {
     }
 
     shouldComponentUpdate(nextProps,nextState){
-        console.log('shouldComponentUpdate',nextProps,nextState);
+        //console.log('shouldComponentUpdate',nextProps,nextState);
         return true;
     }
 

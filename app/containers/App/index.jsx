@@ -24,10 +24,11 @@ class App extends Component {
   }
   state = {
     data     : '',
-    color    :'blue',
-    newsList :[]
+    color    : 'blue',
+    newsList : []
   }
   componentWillMount(){
+    var that = this
     var timestamp = Date.parse(new Date());
     var color = this.state.color
     fuc.getData(254).then((data) => {
@@ -49,17 +50,35 @@ class App extends Component {
       })
       $('.contentWrapper').addClass(color)
     });
-    fuc.test(1476829924,254).then((data)=>{
-      var olddata = this.state.newsList
-      var join = olddata.concat(data.reverse());
-        console.log('2s done')
-      /*        console.log('new data',data.reverse())
-       console.log('old data',olddata)
-       console.log('join data',join)*/
-      this.setState({
-          newsList:join
-      })
-    })
+
+    var scrollEvent = "onscroll" in document.documentElement ? "scroll":"touchmove" ;
+    $('.more_btn_loading').css('display','block');
+    $(window).on('touchmove',function(){
+      //that._timeBand();
+    });
+/*    $(window).on('swipeDown', function(){
+    if(b.isclose == '0'){
+      var rosHeight = $('.roseLive_head_con ').height();
+      var vd = viewData();
+      if(vd.scrollTop < rosHeight){
+        if(b.done){
+          app._incData('down');
+        }
+      }
+    }
+  });*/
+    $(window).on(scrollEvent, function(){
+        var ret = fuc.util._initScrollEnd(254)
+        if(ret){
+          ret.then((data)=>{
+            var olddata = that.state.newsList
+            var join = olddata.concat(data.reverse());
+            that.setState({
+              newsList:join
+            })
+          })
+        }
+    });
   }
   componentDidMount(){
 

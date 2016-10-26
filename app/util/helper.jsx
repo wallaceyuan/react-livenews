@@ -8,11 +8,11 @@ function getData(id) {
   let u = url+id+'.json?ord=asc?'+timestamp+'&jsoncallback=?';
   return $.getJSON(u)
 }
+
 function getNextData(pid,cid) {
   let url = 'http://api.kankanews.com/kkweb/kkstu/next/'+pid+'/'+cid+'.json?ord=desc&jsoncallback=?'
   return $.getJSON(url)
 }
-
 
 function test(pid,cid) {
   var promise = new Promise(function(resolve, reject) {
@@ -25,8 +25,25 @@ function test(pid,cid) {
   return promise;
 }
 
+function regBr(txt) {
+  return txt.replace(/\r\n/g,"<br>")
+}
 
+
+var  b = {
+  //streamid:streamid,
+  eid:eid, isclose : isclose, page : 0, flag :false, timefalg :0,
+  win : $(window), loading : $('.feed-card-loading'), winWidth : document.documentElement.clientWidth,
+  loadpic :'http://skin.kankanews.com/onlive/mline/images/place.jpg',
+  color :color, date:[], headDate:[], videoSt:'on', done:true, load :false,
+  vidoepic:'http://act.shanghaicity.openservice.kankanews.com/iloveshanghai/2015/live/images/play.png',
+  uc:false
+}
+var cid = 0
 var util = {
+  param:{
+    cid:0
+  },
   viewData :function(){
       var e = 0, l = 0, i = 0, g = 0, f = 0, m = 0;
       var j = window, h = document, k = h.documentElement;
@@ -38,10 +55,10 @@ var util = {
       m = Math.max(h.body.scrollHeight, k.scrollHeight || 0, l);
       return {scrollTop: g,scrollLeft: i,documentWidth: f,documentHeight: m,viewWidth: e,viewHeight: l};
   },
-  _initScrollEnd: function(){
+  _initScrollEnd: function(cid){
+    this.param.cid = cid
     var that = this;
     var timeout = null;
-    var scrollEvent = "onscroll" in document.documentElement ? "scroll":"touchmove" ;
     $('.more_btn_loading').css('display','block');
     if(parseInt(streamid) ){
       if(b.flag) return;
@@ -50,119 +67,59 @@ var util = {
       }
       return
     }
-    $(window).on('touchmove',function(){
-      //that._timeBand();
-    });
-    $(window).on(scrollEvent, function(){
-      //that._timeBand();
-      $('.more_btn_loading').css('display','block');
-      if(b.flag) return;
-      if(timeout) {
-        clearTimeout(timeout);
-      }
-      timeout = setTimeout(function(){
-        var vd = this.viewData();
-        that.ald = 0;
-        if(vd.viewHeight + vd.scrollTop + that.ald >= vd.documentHeight){
-          that._loadNews();
-        }
-      }, 100);
-    });
-  /*    $(window).on('swipeDown', function(){
-      if(b.isclose == '0'){
-        var rosHeight = $('.roseLive_head_con ').height();
-        var vd = viewData();
-        if(vd.scrollTop < rosHeight){
-          if(b.done){
-            app._incData('down');
-          }
-        }
-      }
-    });*/
+    $('.more_btn_loading').css('display','block');
+    if(b.flag) return;
+    if(timeout) {
+      clearTimeout(timeout);
+    }
+    var vd = that.viewData();
+    that.ald = 0;
+    if(vd.viewHeight + vd.scrollTop + that.ald >= vd.documentHeight){
+      return  that._loadNews();
+    }
   },
   _loadNews: function() {
-    var scrolltime = $('.allnews').last().attr('time');
-    //console.log('_loadNews',scrolltime);
+    var scrolltime = $('.allnews').last().attr('data-time');
     if(scrolltime == null){
       return;
     }
     $('.more_btn').html('加载中……');$('.loadingbtn').css('opacity',1);
     var that = this;
-    that._setLoadingState(true);
+    return that._setLoadingState(true);
   },
   _setLoadingState: function(isLoading){
+    //console.log('cid',this.param.cid)
     var that = this;
     that.isLoading = isLoading;
     if(isLoading){
       var timestamp = Date.parse(new Date());
-      var scrolltime = $('.allnews').last().attr('time');
+      var scrolltime = $('.allnews').last().attr('data-time');
       $('.more_btnbox').css('display','block');
       if(b.isclose == 1){
         var od = 'asc';
       }else{
         var od = 'desc';
       }
-      var url = 'http://api.kankanews.com/kkweb/kkstu/next/'+scrolltime+'/'+b.eid+'.json?ord='+od;
-      that.render(url);
+      var url = 'http://api.kankanews.com/kkweb/kkstu/next/'+scrolltime+'/'+this.param.cid+'.json?ord='+od;
+      return that.render(scrolltime,this.param.cid);
     }
   },
-  render: function(url) {
-    console.log('render');
+  render: function(pid,cid) {
     b.done = false;
     if(b.flag){
       $('.more_btn').html('已经加载全部');$('.loadingbtn').css('opacity',0);
       b.done = true;
-      return
+      return false
     }
     $('.more_btn').html('加载中……');$('.loadingbtn').css('opacity',1);
-    var insert =$(".fresh .allnews:last");
-    $.ajax({
-      type : "get",
-      async: false,
-      url  : url, //跨域请求的URL
-      dataType : "jsonp",
-      jsonp: "jsoncallback",
-      jsonpCallback: "success_jsonpCallback",
-      success : function(response){
-        /*2.2.3 初始化下拉*/
-        b.done = true;
-        if(response ==""){
-          $('.more_btn').html('已经加载全部');$('.loadingbtn').css('opacity',0);
-          b.flag = true;
-          return;
-        }
-        /*下拉加载*/
-        for(var i=0;i<response.length;i++){
-          var newhtml = orderList(response[i],i,b.streamid);
-          if(insert.length  == 0){
-            $(".fresh").append(newhtml);
-          }else{
-            insert.after(newhtml);
-          }
-          if(i == response.length-1){
-            $('.more_btn').html('上拉加载更多');$('.loadingbtn').css('opacity',0);
-          }
-        }//for
-        if(response.length!=0){
-          timeBar();
-          if(parseInt(b.streamid)){
-            app._vidoeTimeBand();
-            app.Refresh();
-          }else{
-            app._timeBand();
-          }
-        }
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-
-      }
-    });
+    return getNextData(pid,cid)
   },
 }
 
 
 module.exports = {
   getData : getData,
-  util    :util,
-  test    :test
+  util    : util,
+  test    : test,
+  regBr   : regBr
 }
