@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {Header, TimeBar, Content } from '../../components';
+import $ from 'jquery'
 
 import fuc from '../../util/helper.jsx'
 import './index.css';
-import $ from 'jquery'
+
 
 class Compse extends Component {
   render(){
@@ -49,6 +50,8 @@ class App extends Component {
         newsList:data.news.reverse()
       })
       $('.contentWrapper').addClass(color)
+    }).then(()=>{
+      var studio = this.state.data.studio
     });
 
     var scrollEvent = "onscroll" in document.documentElement ? "scroll":"touchmove" ;
@@ -67,6 +70,8 @@ class App extends Component {
       }
     }
   });*/
+
+
     $(window).on(scrollEvent, function(){
         var ret = fuc.util._initScrollEnd(254)
         if(ret){

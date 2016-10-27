@@ -7,11 +7,15 @@ class Header extends Component {
   }
   render() {
     var studio = this.props.data
+    if(studio){
+      studio.streamid = 144
+    }
     if(studio && parseInt(studio.streamid)){
       $('.contentWrapper').addClass('fixe');
       $('.roseLive_head_con').addClass('fixeddd');
-      var vidoeW  = '<div class="videoW"></div>';
-      $('.roseLive_head').append(vidoeW);
+      var head = <div className="videoW">
+                    <video id="Video"  onwebkitfullscreenchange="OnFullscreen(this)" onresize="OnFullscreen(this)" controls="" width="100%" height="100%" poster="" x-webkit-airplay="true" webkit-playsinline="true"><source src={studio.streamurl} type="video/mp4" /></video>
+                 </div>
     }else if(studio && studio.titlepic){
       var head = <div className="head_img"><img className="livebackground pic_ground" src={studio.titlepic} alt="" width="100%" /></div>
     }

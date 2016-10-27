@@ -1,7 +1,12 @@
 import axios from 'axios';
 import $ from 'jquery'
+import React ,{Component} from 'react'
 
-const url = 'http://api.kankanews.com/kkweb/kkstu/cast/'
+let url = 'http://api.kankanews.com/kkweb/kkstu/cast/'
+let outhtml  = '';
+let linkPic  = 'http://skin.kankanews.com/onlive/mline/images/link.png';
+let journPic = 'http://skin.kankanews.com/onlive/mline/images/xiaowen.jpg'
+let loadingPic = 'http://skin.kankanews.com/onlive/mline/images/place.jpg'
 
 function getData(id) {
   var timestamp = Date.parse(new Date());
@@ -39,7 +44,7 @@ var  b = {
   vidoepic:'http://act.shanghaicity.openservice.kankanews.com/iloveshanghai/2015/live/images/play.png',
   uc:false
 }
-var cid = 0
+
 var util = {
   param:{
     cid:0
@@ -75,7 +80,16 @@ var util = {
     var vd = that.viewData();
     that.ald = 0;
     if(vd.viewHeight + vd.scrollTop + that.ald >= vd.documentHeight){
-      return  that._loadNews();
+      return that._loadNews().then((data)=>{
+        b.done = true;
+        if(data.length == 0){
+          $('.more_btn').html('已经加载全部');$('.loadingbtn').css('opacity',0);
+          b.flag = true;
+        }else{
+          $('.more_btn').html('上拉加载更多');$('.loadingbtn').css('opacity',0);
+          return data
+        }
+      });
     }
   },
   _loadNews: function() {
@@ -88,11 +102,9 @@ var util = {
     return that._setLoadingState(true);
   },
   _setLoadingState: function(isLoading){
-    //console.log('cid',this.param.cid)
     var that = this;
     that.isLoading = isLoading;
     if(isLoading){
-      var timestamp = Date.parse(new Date());
       var scrolltime = $('.allnews').last().attr('data-time');
       $('.more_btnbox').css('display','block');
       if(b.isclose == 1){
@@ -116,10 +128,92 @@ var util = {
   },
 }
 
+function render(data) {
+  var journalistintro = data.journalistintro?'['+data.journalistintro+']':'[看看新闻主持人]';
+  var journalist = data.journalist?data.journalist:' ';
+
+  if(data.videoframe){
+      if(parseInt(streamid)){
+        var picontent = <div className="pics video before" data-src={data.videoframe}>
+                          <div className="poster">
+                              <img src={data.titlepic} />
+                              <div className="playbut"></div>
+                          </div>
+                          <video id="Video{data.timestamp}"  width="100%" height="100%" preload="none" controls="true" poster={data.titlepic} webkit-playsinline="true"><source src={data.videourl} type="video/mp4" /></video>
+                      </div>
+      }else{
+        //console.log('videoframe',data.videoframe)
+        var patt = /http(.*?)"/gi;
+        var str = data.videoframe
+        var iUrl = str.match(patt)[0].split('\"')[0]
+        var picontent = <div className="pics video before" data-src={str}>
+                          <iframe height='450' width='530' src={iUrl} frameBorder='0' allowFullScreen />
+                        </div>
+      }
+  }else{
+    var piclist = data.titlepic?data.titlepic.split("|"):'';
+    if(piclist.length >1){
+        var pictwo = '';
+        if(piclist.length == 2){pictwo = 'two';}
+        var style = {
+          'backgroundImage':'url({loadingPic})'
+        }
+        var picontent = <div className="pics more {pictwo} clearfix">
+                          {
+                            piclist.map(function(obj,i){
+                              <li><span><img className="demos-image" style={style}  data-time={data.newstime?data.newstime.split(' ')[1]:''}  data-original={obj} src="'+b.loadpic+'" /></span></li>
+                            })
+                          }
+                        </div>;
+    }else{
+        if(piclist[0]){
+            var picontent = <div className="pics"><li><span><img src={piclist[0]}  width="100%" onload="app.loadImage()" /></span></li></div>;
+        }else{
+            var picontent ='';
+        }
+    }
+  }
+  if(data.outlink){
+      var oHtml = data.outlink.map(function (obj) {
+          <span className="outlink"><a href={obj.link}>{obj.title}</a></span>
+      })
+  }else{
+      var oHtml = ''
+  }
+
+  var html = <div className="live_list allnews" data-time={data.timestamp} data-date={data.newstime?data.newstime.split(' ')[0]:''}>
+              <div className="list_con">
+                <div className="content">
+                  <div className="item">
+                      <p className="portrait">
+                      {data.journalistpic?<img src={data.journalistpic}/>:<img src={journPic}/>}
+                      </p>
+                      <div className="itemW">
+                          <div className="news">
+                              <div className="man">
+                                  {data.journalistintro ||  data.journalist?<span className="identity">'+journalistintro+'</span>:<span className="identity">[看看新闻主持人]</span>}
+                                  {data.journalistintro ||  data.journalist?<span className="name">'+journalist+'</span>:<span className="name">小文</span>}
+                                  <span className="time">{data.newstime?data.newstime.split(' ')[1]:''}</span>
+                              </div>
+                              <p className="title">
+  {data.titleurl?<a href={data.titleurl}>{data.title}<i><img src={linkPic} width="16" height="16" /></i></a>:data.title}
+                              </p>
+                              {data.newstext && <div className="desc"><p>{regBr(data.newstext)}</p></div> }
+                              {picontent}
+                              {oHtml}
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    return html
+}
 
 module.exports = {
   getData : getData,
   util    : util,
   test    : test,
-  regBr   : regBr
+  regBr   : regBr,
+  render  : render
 }
