@@ -141,7 +141,7 @@ background-color:#00aecd;position:absolute;top:0;left:0;width:23px;height:23px;-
 .ul_content{background:#f6f6f6;}
 .mask{position:absolute;top:0;left:0;z-index:10000;width:100%;height:100%;background:#fff url(http://www.kankanews.com/m/2015news/2016shlh_load.gif) no-repeat center center;background-size:40%;}
 .maskload{
-    display: none;
+    display: block;
     position: absolute;
     top: 0;
     left: 0;

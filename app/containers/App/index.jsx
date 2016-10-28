@@ -9,11 +9,14 @@ import './index.css';
 class Compse extends Component {
   render(){
     var props = this.props
+    if(props.data){
+      props.data.studio.streamid = 144
+    }
     return (
       <div>
         <Header data={props.data.studio} />
         <TimeBar />
-        <Content data={props}/>
+        {}<Content data={props}/>
       </div>
     )
   }
@@ -71,25 +74,13 @@ class App extends Component {
     }
   });*/
 
-
-    $(window).on(scrollEvent, function(){
-        var ret = fuc.util._initScrollEnd(254)
-        if(ret){
-          ret.then((data)=>{
-            var olddata = that.state.newsList
-            var join = olddata.concat(data.reverse());
-            that.setState({
-              newsList:join
-            })
-          })
-        }
-    });
   }
   componentDidMount(){
 
-    console.log('componentDidMount');
+    //console.log('componentDidMount');
   }
   render() {
+    console.log(83,this.state.data)
     return (
       <Compse data={this.state.data} color={this.state.color} newsList={this.state.newsList}/>
     )

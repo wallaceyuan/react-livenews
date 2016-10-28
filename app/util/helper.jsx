@@ -1,6 +1,8 @@
 import axios from 'axios';
 import $ from 'jquery'
 import React ,{Component} from 'react'
+import ReactVideo from 'react.video';
+
 
 let url = 'http://api.kankanews.com/kkweb/kkstu/cast/'
 let outhtml  = '';
@@ -16,6 +18,7 @@ function getData(id) {
 
 function getNextData(pid,cid) {
   let url = 'http://api.kankanews.com/kkweb/kkstu/next/'+pid+'/'+cid+'.json?ord=desc&jsoncallback=?'
+  console.log('url',url)
   return $.getJSON(url)
 }
 
@@ -49,18 +52,7 @@ var util = {
   param:{
     cid:0
   },
-  viewData :function(){
-      var e = 0, l = 0, i = 0, g = 0, f = 0, m = 0;
-      var j = window, h = document, k = h.documentElement;
-      e = k.clientWidth || h.body.clientWidth || 0;
-      l = j.innerHeight || k.clientHeight || h.body.clientHeight || 0;
-      g = h.body.scrollTop || k.scrollTop || j.pageYOffset || 0;
-      i = h.body.scrollLeft || k.scrollLeft || j.pageXOffset || 0;
-      f = Math.max(h.body.scrollWidth, k.scrollWidth || 0);
-      m = Math.max(h.body.scrollHeight, k.scrollHeight || 0, l);
-      return {scrollTop: g,scrollLeft: i,documentWidth: f,documentHeight: m,viewWidth: e,viewHeight: l};
-  },
-  _initScrollEnd: function(cid){
+  more_btn:function(cid){
     this.param.cid = cid
     var that = this;
     var timeout = null;
@@ -77,10 +69,24 @@ var util = {
     if(timeout) {
       clearTimeout(timeout);
     }
-    var vd = that.viewData();
-    that.ald = 0;
-    if(vd.viewHeight + vd.scrollTop + that.ald >= vd.documentHeight){
-      return that._loadNews().then((data)=>{
+  },
+  viewData :function(){
+      var e = 0, l = 0, i = 0, g = 0, f = 0, m = 0;
+      var j = window, h = document, k = h.documentElement;
+      e = k.clientWidth || h.body.clientWidth || 0;
+      l = j.innerHeight || k.clientHeight || h.body.clientHeight || 0;
+      g = h.body.scrollTop || k.scrollTop || j.pageYOffset || 0;
+      i = h.body.scrollLeft || k.scrollLeft || j.pageXOffset || 0;
+      f = Math.max(h.body.scrollWidth, k.scrollWidth || 0);
+      m = Math.max(h.body.scrollHeight, k.scrollHeight || 0, l);
+      return {scrollTop: g,scrollLeft: i,documentWidth: f,documentHeight: m,viewWidth: e,viewHeight: l};
+  },
+  _initScrollEnd: function(cid){
+    this.more_btn(cid)
+    var vd = this.viewData();
+    this.ald = 0;
+    if(vd.viewHeight + vd.scrollTop + this.ald >= vd.documentHeight){
+      return this._loadNews().then((data)=>{
         b.done = true;
         if(data.length == 0){
           $('.more_btn').html('已经加载全部');$('.loadingbtn').css('opacity',0);
@@ -94,6 +100,7 @@ var util = {
   },
   _loadNews: function() {
     var scrolltime = $('.allnews').last().attr('data-time');
+    console.log('_loadNews',scrolltime)
     if(scrolltime == null){
       return;
     }
@@ -128,18 +135,75 @@ var util = {
   },
 }
 
-function render(data) {
+var scroll = {
+  onscroll:function(scint){
+    //app._vidoeTimeBand();
+    console.log('scroll', b.done);
+    if (!b.done)return
+    var $pullDown = $('.pulldown');
+    var $pullUp = $('.more_btn_loading');
+    if (scint.y > 40) {
+      $pullDown.addClass('flip').html('松开后刷新...');
+    } else {
+      $pullDown.removeClass('flip').find('.more_btn').html('下拉刷新...');
+    }
+    if (b.flag)return
+    if (scint.maxScrollY - scint.y > 40) {
+      $pullUp.addClass('flip');
+    }
+  },
+  onscrollEnd:function(scint,cid){
+    util.more_btn(cid)
+    //app._vidoeTimeBand();
+    if (!b.done) return
+    var $pullDown = $('.pulldown');
+    var $pullUp = $('.more_btn_loading');
+    if ($pullDown.hasClass('flip')) {
+      $pullDown.removeClass('flip').html('加载中...');
+      if(b.done){
+        //app._incData('down');  // 0 表示下拉刷新
+      }
+    }
+    if (b.flag) return
+    console.log(scint.maxScrollY , scint.y );
+    if (scint.maxScrollY - scint.y > -5) {
+      console.log('b.done', b.done);
+      $pullUp.removeClass('flip').find('.more_btn').html('加载中...');
+      // 1 表示上拉刷新
+      return util._loadNews().then((data)=>{
+        b.done = true;
+        if(data.length == 0){
+          $('.more_btn').html('已经加载全部');$('.loadingbtn').css('opacity',0);
+          b.flag = true;
+        }else{
+          $('.more_btn').html('上拉加载更多');$('.loadingbtn').css('opacity',0);
+          return data
+        }
+      });
+    }
+  }
+}
+
+function render(data,streamid,conts) {
   var journalistintro = data.journalistintro?'['+data.journalistintro+']':'[看看新闻主持人]';
   var journalist = data.journalist?data.journalist:' ';
 
   if(data.videoframe){
       if(parseInt(streamid)){
+        var source = [{src: data.videourl,type: 'video/mp4'}]
         var picontent = <div className="pics video before" data-src={data.videoframe}>
-                          <div className="poster">
+                          <div className="poster" onClick={conts.posterClick} ref={'poster'}>
                               <img src={data.titlepic} />
                               <div className="playbut"></div>
                           </div>
-                          <video id="Video{data.timestamp}"  width="100%" height="100%" preload="none" controls="true" poster={data.titlepic} webkit-playsinline="true"><source src={data.videourl} type="video/mp4" /></video>
+                          <ReactVideo
+                              id={data.timestamp}
+                              ref={'VideoComp'}
+                              cls={'custom-video'}
+                              height={'100%'} width={'100%'}
+                              poster={data.titlepic}
+                              source={source}>
+                          </ReactVideo>
                       </div>
       }else{
         //console.log('videoframe',data.videoframe)
@@ -215,5 +279,6 @@ module.exports = {
   util    : util,
   test    : test,
   regBr   : regBr,
-  render  : render
+  render  : render,
+  scroll  : scroll
 }

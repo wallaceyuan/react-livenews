@@ -8,7 +8,7 @@ class Header extends Component {
   render() {
     var studio = this.props.data
     if(studio){
-      studio.streamid = 144
+      //studio.streamid = 144
     }
     if(studio && parseInt(studio.streamid)){
       $('.contentWrapper').addClass('fixe');
