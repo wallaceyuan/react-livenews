@@ -59,10 +59,16 @@ class CommentComp extends Component {
       newsList : nextProps.newsList,
     })
   }
+  componentWillMount(){
+    console.log(this.props,63)
+    this.setState({
+      newsList : this.props.newsList,
+    })
+  }
   render(){
     var streamid = this.props.streamid
     return(
-        <div id="scroller">
+        <div >
           <div className="maskload"></div>
           <div className="pulldown">
               <span className="icon"></span><span className="label">下拉刷新...</span>
@@ -209,6 +215,11 @@ class ReactIScroll extends Component {
         })
       }
     });
+    myScroll.refresh();
+    setTimeout(function(){
+      $('.maskload').css('display','none')
+      myScroll.refresh();
+    },500)
   }
   componentDidUpdate() {
     console.log('componentDidUpdate ReactIScroll')
@@ -217,6 +228,21 @@ class ReactIScroll extends Component {
       $('.maskload').css('display','none')
       myScroll.refresh();
     },500)
+  }
+}
+
+class Combine extends Component {
+  render(){
+    var dd = this.props.streamid
+    if(dd){
+      var aa = <ReactIScroll {...this.props}/>
+    }else{
+      var aa = <WebIScroll {...this.props}/>
+    }
+    console.log(225,this.props)
+    return(
+      <div id="scroller">{aa}</div>
+    )
   }
 }
 
@@ -247,7 +273,7 @@ class Content extends Component {
         }
         return (
             <div className="ul_content" ref="ul_content">
-              {html}
+              <Combine newsList={this.state.newsList} intro={intro} streamid={streamid}/>
             </div>
         )
     }

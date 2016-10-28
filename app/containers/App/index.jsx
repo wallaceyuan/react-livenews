@@ -10,13 +10,13 @@ class Compse extends Component {
   render(){
     var props = this.props
     if(props.data){
-      props.data.studio.streamid = 144
+      props.data.studio.streamid = ''
     }
     return (
       <div>
         <Header data={props.data.studio} />
         <TimeBar />
-        {}<Content data={props}/>
+        <Content data={props}/>
       </div>
     )
   }
