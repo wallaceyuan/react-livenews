@@ -276,12 +276,24 @@ class ReactIScroll extends Component {
 }
 
 class Combine extends Component {
+  state = {
+    newsList : [],
+    intro    : '',
+    streamid : ''
+  }
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      newsList : nextProps.newsList,
+      intro    : nextProps.intro,
+      streamid : nextProps.streamid
+    })
+  }
   render(){
     var streamid = this.props.streamid
     if(streamid){
-      var html = <ReactIScroll {...this.props}/>
+      var html = <ReactIScroll newsList={this.state.newsList} intro={this.state.intro} streamid={this.state.streamid}/>
     }else{
-      var html = <WebIScroll {...this.props}/>
+      var html = <WebIScroll newsList={this.state.newsList} intro={this.state.intro} streamid={this.state.treamid}/>
     }
     console.log('Combine render')
     return(
@@ -322,6 +334,20 @@ class Content extends Component {
 
     componentDidMount (){
       console.log('componentDidMount Content')
+      var that = this
+
+      var flagtime = setInterval(function(){
+        fuc._incData(254).then((data)=>{
+          var oldA = that.state.newsList
+          data.reverse().map(function(obj,i){
+              oldA.unshift(obj)
+          })
+          that.setState({
+            newsList:oldA
+          })
+          console.log(oldA)
+        })
+			},1000*10);
     }
 
     componentDidUpdate() {

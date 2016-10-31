@@ -10,7 +10,7 @@ class Compse extends Component {
   render(){
     var props = this.props
     if(props.data){
-      props.data.studio.streamid = 144
+      props.data.studio.streamid = ''
     }
     return (
       <div>
@@ -46,7 +46,6 @@ class App extends Component {
       if(data.studio.color == 2){
         color = 'gry'
       }
-
       console.log(51,data.news)
       this.setState({
         color: color,

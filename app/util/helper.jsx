@@ -13,6 +13,7 @@ let outhtml  = '';
 function dataMap(arr){
   return arr.map(function(obj,i){
     var objDate = obj.newstime.split(' ')[0]
+    console.log(objDate,date)
     if($.inArray(objDate,date) == -1){
       date.push(objDate)
       obj.bar = 1
@@ -33,11 +34,27 @@ function getData(id) {
 }
 
 function getNextData(pid,cid) {
-  let url = 'http://api.kankanews.com/kkweb/kkstu/next/'+pid+'/'+cid+'.json?ord=desc&jsoncallback=?'
+  const url = 'http://api.kankanews.com/kkweb/kkstu/next/'+pid+'/'+cid+'.json?ord=desc&jsoncallback=?'
   console.log('url',url)
   return $.getJSON(url).then((data)=>{
     const dataM = data.reverse()
     dataMap(dataM)
+    return dataM
+  })
+}
+
+function _incData(cid) {
+  if(!b.done) return
+  var time = $('.fresh .allnews').first().attr('data-time');
+  if(time == undefined){
+    time = 1;
+  }
+  var timestamp = Date.parse(new Date());
+  var request_url = `http://api.kankanews.com/kkweb/kkstu/incre/${time}/${cid}.json?${timestamp}&jsoncallback=?`;
+  console.log(request_url)
+  return $.getJSON(request_url).then((data)=>{
+    console.log(data)
+    dataMap(data.reverse())
     return data
   })
 }
@@ -292,5 +309,6 @@ module.exports = {
   util       : util,
   regBr      : regBr,
   render     : render,
-  scroll     : scroll
+  scroll     : scroll,
+  _incData   : _incData
 }
