@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Header, TimeBar, Content } from '../../components';
+import {Header, Content } from '../../components';
 import $ from 'jquery'
 
 import fuc from '../../util/helper.jsx'
@@ -10,13 +10,12 @@ class Compse extends Component {
   render(){
     var props = this.props
     if(props.data){
-      props.data.studio.streamid = ''
+      props.data.studio.streamid = 144
     }
     return (
       <div>
         <Header data={props.data.studio} />
-        <TimeBar />
-        <Content data={props}/>
+        <Content data={props} />
       </div>
     )
   }
@@ -47,10 +46,12 @@ class App extends Component {
       if(data.studio.color == 2){
         color = 'gry'
       }
+
+      console.log(51,data.news)
       this.setState({
         color: color,
         data:data,
-        newsList:data.news.reverse()
+        newsList:data.news
       })
       $('.contentWrapper').addClass(color)
     }).then(()=>{
@@ -59,9 +60,6 @@ class App extends Component {
 
     var scrollEvent = "onscroll" in document.documentElement ? "scroll":"touchmove" ;
     $('.more_btn_loading').css('display','block');
-    $(window).on('touchmove',function(){
-      //that._timeBand();
-    });
 /*    $(window).on('swipeDown', function(){
     if(b.isclose == '0'){
       var rosHeight = $('.roseLive_head_con ').height();
@@ -76,7 +74,6 @@ class App extends Component {
 
   }
   componentDidMount(){
-
     //console.log('componentDidMount');
   }
   render() {

@@ -5,6 +5,7 @@ import iScroll from 'iscroll/build/iscroll-probe'
 import fuc from '../../util/helper.jsx'
 
 let myScroll
+
 let options = {
     preventDefault: false,
     mouseWheel: true,
@@ -60,7 +61,7 @@ class CommentComp extends Component {
     })
   }
   componentWillMount(){
-    console.log(this.props,63)
+    console.log('CommentComp componentWillMount',this.props)
     this.setState({
       newsList : this.props.newsList,
     })
@@ -68,7 +69,7 @@ class CommentComp extends Component {
   render(){
     var streamid = this.props.streamid
     return(
-        <div >
+        <div>
           <div className="maskload"></div>
           <div className="pulldown">
               <span className="icon"></span><span className="label">下拉刷新...</span>
@@ -107,21 +108,42 @@ class WebIScroll extends Component {
       streamid:''
   }
   componentWillMount(){
-
+    console.log('componentWillMount WebIScroll')
+    this.setState({
+        newsList : this.props.newsList,
+        intro    : this.props.intro,
+        streamid : this.props.streamid
+    });
   }
   componentWillReceiveProps(nextProps){
       console.log('componentWillReceiveProps ReactIScroll',nextProps)
       var props    = nextProps.newsList
       this.setState({
-          newsList: props
+          newsList: props,
+          intro:nextProps.intro,
+          streamid:nextProps.streamid
       });
-      this.state.intro = nextProps.intro
-      this.state.streamid = nextProps.streamid
   }
   render(){
+    console.log('WebIScroll render')
     return (
       <CommentComp newsList={this.state.newsList} intro={this.state.intro} streamid={this.state.streamid}/>
     )
+  }
+  scrollFunc(){
+    var rosHeight = $('.roseLive_head_con').height()+$('.smalltxt').height()+2*$('.timeCollection.sub').height();
+    var vd = fuc.viewData();
+    if(vd.scrollTop>rosHeight){
+      $('.timeCollection.tip').css('display','block').html($('.timeCollection.sub').eq(0).html());
+    }else{
+      $('.timeCollection.tip').css('display','none');
+    }
+    $('.timeCollection.sub').each(function(i){
+      var judgTimeT = $(this).position().top;
+      if(judgTimeT<vd.scrollTop){
+        $('.timeCollection.tip').html($(this).html());
+      }
+    });
   }
   componentDidMount(){
     $('.maskload').css('display','none')
@@ -134,14 +156,21 @@ class WebIScroll extends Component {
           ret.then((data)=>{
             if(data.length){
               var olddata = that.state.newsList
-              var join = olddata.concat(data.reverse());
+              var join = olddata.concat(data);
               that.setState({
                 newsList:join
               })
             }
           })
         }
+        that.scrollFunc()
     });
+
+    var scrollEvent = "onscroll" in document.documentElement ? "scroll":"touchmove" ;
+    $(window).on(scrollEvent,function(){
+
+    });
+
   }
   componentDidUpdate() {
     console.log('componentDidUpdate WebTScroll')
@@ -155,32 +184,26 @@ class ReactIScroll extends Component {
       streamid:''
   }
   componentWillMount(){
-    console.log(this.props)
-    console.log('render ReactIScroll')
-    var newsList    = this.props.newsList
-    var intro    = this.props.intro
-    var streamid = this.props.streamid
-    console.log(157,newsList)
+    console.log('componentWillMount ReactIScroll')
     this.setState({
-        newsList: newsList,
-        intro:intro,
-        streamid:streamid
+        newsList : this.props.newsList,
+        intro    : this.props.intro,
+        streamid : this.props.streamid
     });
   }
   componentWillUpdate(nextProps,nextState){
     console.log('componentWillUpdate ReactIScroll');
   }
   componentWillReceiveProps(nextProps){
-      console.log('componentWillReceiveProps ReactIScroll',nextProps)
-      var props    = nextProps.newsList
+      console.log(173,'componentWillReceiveProps ReactIScroll',nextProps)
       this.setState({
-          newsList: props
+          newsList: nextProps.newsList,
+          intro:nextProps.intro,
+          streamid:nextProps.streamid
       });
-      this.state.intro = nextProps.intro
-      this.state.streamid = nextProps.streamid
   }
   render(){
-    console.log(174,this.state.newsList,'render')
+    console.log('ReactIScroll render',this.state.newsList)
     var dd = $('.fixeddd').height()
     $('.fixe .ul_content').css({
       'top': dd - 50 + 'px'
@@ -193,6 +216,26 @@ class ReactIScroll extends Component {
       <CommentComp newsList={this.state.newsList} intro={this.state.intro} streamid={this.state.streamid}/>
     )
   }
+  scrollFunc(){
+		var dd = $('.fixeddd').height();
+		if($('.timeCollection.sub').eq(0).length == 0){
+			return
+		}
+		$('.timeCollection.tip').css('display','block');
+		var startS = $('.timeCollection.sub').eq(0).offset().top;
+		if(startS<dd){
+			$('.timeCollection.tip').css('display','block').html($('.timeCollection.sub').html());
+		}
+		if(startS>dd){
+			$('.timeCollection.tip').css('display','none');
+		}
+		$('.timeCollection.sub').each(function(i){
+			var judgTimeT = $(this).offset().top;
+			if(judgTimeT<dd){
+				$('.timeCollection.tip').html($(this).html());
+			}
+		});
+  }
   componentDidMount(){
     myScroll = new iScroll('.ul_content',options);
     var scroll = fuc.scroll,
@@ -200,15 +243,16 @@ class ReactIScroll extends Component {
     myScroll.on('scroll', function () {
       var scint = this
       scroll.onscroll(scint)
+      that.scrollFunc()
     });
     myScroll.on('scrollEnd', function () {
+      that.scrollFunc()
       var scint = this
       var ret = scroll.onscrollEnd(scint,254)
       if(ret){
         ret.then((data)=>{
-          console.log(data)
           var olddata = that.state.newsList
-          var join = olddata.concat(data.reverse());
+          var join = olddata.concat(data);
           that.setState({
             newsList:join
           })
@@ -233,15 +277,15 @@ class ReactIScroll extends Component {
 
 class Combine extends Component {
   render(){
-    var dd = this.props.streamid
-    if(dd){
-      var aa = <ReactIScroll {...this.props}/>
+    var streamid = this.props.streamid
+    if(streamid){
+      var html = <ReactIScroll {...this.props}/>
     }else{
-      var aa = <WebIScroll {...this.props}/>
+      var html = <WebIScroll {...this.props}/>
     }
-    console.log(225,this.props)
+    console.log('Combine render')
     return(
-      <div id="scroller">{aa}</div>
+      <div id="scroller">{html}</div>
     )
   }
 }
@@ -259,31 +303,29 @@ class Content extends Component {
             newsList: props
         });
     }
+
     render(){
-        console.log('render')
+        console.log('Content render')
         var props    = this.props.data.data
         var intro    = props!=''?props.studio.intro:''
         var streamid = props!=''?props.studio.streamid:''
         console.log(230,'streamid',streamid)
-        if(streamid){
-          console.log(this.state.newsList)
-          var html = <ReactIScroll newsList={this.state.newsList} intro={intro} streamid={streamid}/>
-        }else{
-          var html = <ReactIScroll newsList={this.state.newsList} intro={intro} streamid={streamid}/>
-        }
         return (
-            <div className="ul_content" ref="ul_content">
-              <Combine newsList={this.state.newsList} intro={intro} streamid={streamid}/>
+            <div>
+              <div className="timeCollection tip"></div>
+              <div className="ul_content" ref="ul_content">
+                <Combine newsList={this.state.newsList} intro={intro} streamid={streamid}/>
+              </div>
             </div>
         )
     }
+
     componentDidMount (){
       console.log('componentDidMount Content')
-
     }
+
     componentDidUpdate() {
       console.log('componentDidUpdate content')
-
     }
 }
 

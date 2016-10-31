@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import $ from 'jquery'
+import fuc from '../../util/helper.jsx'
 
 class TimeBar extends Component {
   render() {
     return(
-      <div className="timeCollection tip"></div>
+
     )
+  }
+  componentDidMount(){
+
   }
 }
 export default TimeBar;

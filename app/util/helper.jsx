@@ -3,34 +3,43 @@ import $ from 'jquery'
 import React ,{Component} from 'react'
 import ReactVideo from 'react.video';
 
-
 let url = 'http://api.kankanews.com/kkweb/kkstu/cast/'
-let outhtml  = '';
 let linkPic  = 'http://skin.kankanews.com/onlive/mline/images/link.png';
 let journPic = 'http://skin.kankanews.com/onlive/mline/images/xiaowen.jpg'
 let loadingPic = 'http://skin.kankanews.com/onlive/mline/images/place.jpg'
+let date = [], headDate = []
+let outhtml  = '';
+
+function dataMap(arr){
+  return arr.map(function(obj,i){
+    var objDate = obj.newstime.split(' ')[0]
+    if($.inArray(objDate,date) == -1){
+      date.push(objDate)
+      obj.bar = 1
+    }else{
+      obj.bar = 0
+    }
+  })
+}
 
 function getData(id) {
   var timestamp = Date.parse(new Date());
   let u = url+id+'.json?ord=asc?'+timestamp+'&jsoncallback=?';
-  return $.getJSON(u)
+  return $.getJSON(u).then((data)=>{
+    const dataNews = data.news.reverse()
+    dataMap(dataNews)
+    return data
+  })
 }
 
 function getNextData(pid,cid) {
   let url = 'http://api.kankanews.com/kkweb/kkstu/next/'+pid+'/'+cid+'.json?ord=desc&jsoncallback=?'
   console.log('url',url)
-  return $.getJSON(url)
-}
-
-function test(pid,cid) {
-  var promise = new Promise(function(resolve, reject) {
-    window.setTimeout(function() {
-      getNextData(pid,cid).then((data)=>{
-        resolve(data);
-      })
-    },2000);
-  });
-  return promise;
+  return $.getJSON(url).then((data)=>{
+    const dataM = data.reverse()
+    dataMap(dataM)
+    return data
+  })
 }
 
 function regBr(txt) {
@@ -238,14 +247,17 @@ function render(data,streamid,conts) {
     }
   }
   if(data.outlink){
-      var oHtml = data.outlink.map(function (obj) {
-          <span className="outlink"><a href={obj.link}>{obj.title}</a></span>
+      var oHtml = ''
+      data.outlink.map(function (obj) {
+          oHtml += <span className="outlink"><a href={obj.link}>{obj.title}</a></span>
       })
   }else{
       var oHtml = ''
   }
+  var dd = data.newstime?data.newstime.split(' ')[0]:''
 
   var html = <div className="live_list allnews" data-time={data.timestamp} data-date={data.newstime?data.newstime.split(' ')[0]:''}>
+              {data.bar ? <div className="timeCollection sub">{dd}</div>:''}
               <div className="list_con">
                 <div className="content">
                   <div className="item">
@@ -275,10 +287,10 @@ function render(data,streamid,conts) {
 }
 
 module.exports = {
-  getData : getData,
-  util    : util,
-  test    : test,
-  regBr   : regBr,
-  render  : render,
-  scroll  : scroll
+  viewData   : util.viewData,
+  getData    : getData,
+  util       : util,
+  regBr      : regBr,
+  render     : render,
+  scroll     : scroll
 }

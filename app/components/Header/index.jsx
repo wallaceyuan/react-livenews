@@ -7,9 +7,6 @@ class Header extends Component {
   }
   render() {
     var studio = this.props.data
-    if(studio){
-      //studio.streamid = 144
-    }
     if(studio && parseInt(studio.streamid)){
       $('.contentWrapper').addClass('fixe');
       $('.roseLive_head_con').addClass('fixeddd');
@@ -23,7 +20,7 @@ class Header extends Component {
       <div className="roseLive_head_con">
         <div className="roseLive_head">
             {head}
-          </div>
+        </div>
       </div>
     );
   }
