@@ -10,7 +10,7 @@ class Compse extends Component {
   render(){
     var props = this.props
     if(props.data){
-      props.data.studio.streamid = ''
+      props.data.studio.streamid = 144
     }
     return (
       <div>
@@ -28,13 +28,15 @@ class App extends Component {
   state = {
     data     : '',
     color    : 'blue',
-    newsList : []
+    newsList : [],
+    id       : 254
   }
   componentWillMount(){
     var that = this
     var timestamp = Date.parse(new Date());
-    var color = this.state.color
-    fuc.getData(254).then((data) => {
+    var color = this.state.color,
+        id = this.state.id
+    fuc.getData(id).then((data) => {
       $('.mask').css('display','none');
       $('.contentWrapper').css('display','block');
       if(data.studio.color == 0){
@@ -46,7 +48,7 @@ class App extends Component {
       if(data.studio.color == 2){
         color = 'gry'
       }
-      console.log(51,data.news)
+      //console.log(51,data.news)
       this.setState({
         color: color,
         data:data,
@@ -76,9 +78,9 @@ class App extends Component {
     //console.log('componentDidMount');
   }
   render() {
-    console.log(83,this.state.data)
+    //console.log(83,this.state.data)
     return (
-      <Compse data={this.state.data} color={this.state.color} newsList={this.state.newsList}/>
+      <Compse data={this.state.data} color={this.state.color} newsList={this.state.newsList} id = {this.state.id}/>
     )
   }
 }

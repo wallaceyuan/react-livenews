@@ -10,16 +10,18 @@ let loadingPic = 'http://skin.kankanews.com/onlive/mline/images/place.jpg'
 let date = [], headDate = []
 let outhtml  = '';
 
-function dataMap(arr){
+function dataMap(arr,inc=0){
   return arr.map(function(obj,i){
     var objDate = obj.newstime.split(' ')[0]
-    console.log(objDate,date)
+    obj.timeC = objDate
     if($.inArray(objDate,date) == -1){
       date.push(objDate)
       obj.bar = 1
     }else{
       obj.bar = 0
     }
+    inc?obj.inc = 1:obj.inc = 0
+    inc?obj.bar = 1:''
   })
 }
 
@@ -51,10 +53,12 @@ function _incData(cid) {
   }
   var timestamp = Date.parse(new Date());
   var request_url = `http://api.kankanews.com/kkweb/kkstu/incre/${time}/${cid}.json?${timestamp}&jsoncallback=?`;
-  console.log(request_url)
+  //console.log(request_url)
   return $.getJSON(request_url).then((data)=>{
-    console.log(data)
-    dataMap(data.reverse())
+/*    data[0].newstime = "10月20日 06:39"
+    data[1].newstime = "10月20日 08:10"
+    data[2].newstime = "10月20日 18:10"*/
+    dataMap(data.reverse(),1)
     return data
   })
 }
@@ -271,10 +275,12 @@ function render(data,streamid,conts) {
   }else{
       var oHtml = ''
   }
+
   var dd = data.newstime?data.newstime.split(' ')[0]:''
 
+
   var html = <div className="live_list allnews" data-time={data.timestamp} data-date={data.newstime?data.newstime.split(' ')[0]:''}>
-              {data.bar ? <div className="timeCollection sub">{dd}</div>:''}
+              {data.bar? <div className="timeCollection sub" data-time={dd} ref='timeBar'>{dd}</div>:''}
               <div className="list_con">
                 <div className="content">
                   <div className="item">
