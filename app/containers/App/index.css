@@ -19,6 +19,7 @@ img {
 	display: none;
 }
 
+
 .contentWrapper{font-size: 16px;display: none;}
 #followingBallsG{position:relative;width:300px;height:23px;margin: 0 auto;top: 50%;margin-top: -12px;-webkit-transform-style:preserve-3d;-webkit-backface-visibility:hidden;-webkit-transform:translate3d(0,0,0);}
 .followingBallsG{

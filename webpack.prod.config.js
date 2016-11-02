@@ -15,7 +15,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: "[name].[hash:8].js",
-        publicPath: '/'
+        publicPath: './'
     },
     resolve: {
       extension: ['', '.jsx', '.js', '.json'],

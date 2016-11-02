@@ -10,6 +10,13 @@ let loadingPic = 'http://skin.kankanews.com/onlive/mline/images/place.jpg'
 let date = [], headDate = []
 let outhtml  = '';
 
+
+function getQueryString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+  var r = window.location.search.substr(1).match(reg);
+  if (r != null) return unescape(r[2]); return null;
+}
+
 function dataMap(arr,inc=0){
   return arr.map(function(obj,i){
     var objDate = obj.newstime.split(' ')[0]
@@ -247,15 +254,15 @@ function render(data,streamid,conts) {
   }else{
     var piclist = data.titlepic?data.titlepic.split("|"):'';
     if(piclist.length >1){
-        var pictwo = '';
-        if(piclist.length == 2){pictwo = 'two';}
+        var pictwo = 'pics more clearfix';
+        if(piclist.length == 2){pictwo += ' two';}
         var style = {
           'backgroundImage':'url({loadingPic})'
         }
-        var picontent = <div className="pics more {pictwo} clearfix">
+        var picontent = <div className={pictwo}>
                           {
                             piclist.map(function(obj,i){
-                              <li><span><img className="demos-image" style={style}  data-time={data.newstime?data.newstime.split(' ')[1]:''}  data-original={obj} src="'+b.loadpic+'" /></span></li>
+                              return <li><span><img className="demos-image" style={style}  data-time={data.newstime?data.newstime.split(' ')[1]:''}  data-original={obj} src={obj} /></span></li>
                             })
                           }
                         </div>;
@@ -267,17 +274,17 @@ function render(data,streamid,conts) {
         }
     }
   }
-  if(data.outlink){
-      var oHtml = ''
-      data.outlink.map(function (obj) {
-          oHtml += <span className="outlink"><a href={obj.link}>{obj.title}</a></span>
+  var outlink = ''
+  if(data.outlink && data.outlink.length){
+      outlink = data.outlink.map(function(obj,i){
+        var style = {
+          color:obj.color
+        }
+        return <span className="outlink" ><a href={obj.link} style={style}>{obj.title}</a></span>
       })
-  }else{
-      var oHtml = ''
   }
 
   var dd = data.newstime?data.newstime.split(' ')[0]:''
-
 
   var html = <div className="live_list allnews" data-time={data.timestamp} data-date={data.newstime?data.newstime.split(' ')[0]:''}>
               {data.bar? <div className="timeCollection sub" data-time={dd} ref='timeBar'>{dd}</div>:''}
@@ -290,8 +297,8 @@ function render(data,streamid,conts) {
                       <div className="itemW">
                           <div className="news">
                               <div className="man">
-                                  {data.journalistintro ||  data.journalist?<span className="identity">'+journalistintro+'</span>:<span className="identity">[看看新闻主持人]</span>}
-                                  {data.journalistintro ||  data.journalist?<span className="name">'+journalist+'</span>:<span className="name">小文</span>}
+                                  {data.journalistintro ||  data.journalist?<span className="identity">{journalistintro}</span>:<span className="identity">[看看新闻主持人]</span>}
+                                  {data.journalistintro ||  data.journalist?<span className="name">{journalist}</span>:<span className="name">小文</span>}
                                   <span className="time">{data.newstime?data.newstime.split(' ')[1]:''}</span>
                               </div>
                               <p className="title">
@@ -299,7 +306,7 @@ function render(data,streamid,conts) {
                               </p>
                               {data.newstext && <div className="desc"><p>{regBr(data.newstext)}</p></div> }
                               {picontent}
-                              {oHtml}
+                              {outlink}
                           </div>
                       </div>
                   </div>
@@ -310,11 +317,12 @@ function render(data,streamid,conts) {
 }
 
 module.exports = {
-  viewData   : util.viewData,
-  getData    : getData,
-  util       : util,
-  regBr      : regBr,
-  render     : render,
-  scroll     : scroll,
-  _incData   : _incData
+  getQueryString : getQueryString,
+  viewData       : util.viewData,
+  getData        : getData,
+  util           : util,
+  regBr          : regBr,
+  render         : render,
+  scroll         : scroll,
+  _incData       : _incData
 }

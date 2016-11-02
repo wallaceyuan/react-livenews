@@ -41,10 +41,10 @@ module.exports = {
       stats: { colors: true },
       proxy: [
             {
-              path: /^\/public\/road\/(.*)/,
+/*              path: /^\/public\/road\/(.*)/,
               target: "http://localhost:8080/",
               rewrite: rewriteUrl('/$1\.json'),
-              changeOrigin: true
+              changeOrigin: true*/
             }
         ]
     },

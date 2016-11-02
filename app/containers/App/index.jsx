@@ -10,7 +10,7 @@ class Compse extends Component {
   render(){
     var props = this.props
     if(props.data){
-      props.data.studio.streamid = 144
+      props.data.studio.streamid = ''
     }
     return (
       <div>
@@ -29,14 +29,13 @@ class App extends Component {
     data     : '',
     color    : 'blue',
     newsList : [],
-    id       : 254
   }
   componentWillMount(){
-    var that = this
+    var idParam = fuc.getQueryString('id')
+    idParam = idParam?idParam:254
     var timestamp = Date.parse(new Date());
-    var color = this.state.color,
-        id = this.state.id
-    fuc.getData(id).then((data) => {
+    var color = this.state.color
+    fuc.getData(idParam).then((data) => {
       $('.mask').css('display','none');
       $('.contentWrapper').css('display','block');
       if(data.studio.color == 0){
@@ -48,17 +47,17 @@ class App extends Component {
       if(data.studio.color == 2){
         color = 'gry'
       }
-      //console.log(51,data.news)
       this.setState({
         color: color,
         data:data,
-        newsList:data.news
+        newsList:data.news,
+        id:idParam
       })
       $('.contentWrapper').addClass(color)
+
     }).then(()=>{
       var studio = this.state.data.studio
     });
-
     var scrollEvent = "onscroll" in document.documentElement ? "scroll":"touchmove" ;
     $('.more_btn_loading').css('display','block');
 /*    $(window).on('swipeDown', function(){

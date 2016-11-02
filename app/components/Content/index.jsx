@@ -265,7 +265,7 @@ class ReactIScroll extends Component {
     myScroll = new iScroll('.ul_content',options);
     var scroll = fuc.scroll,
         that = this
-    myScroll.on('scroll', function () {
+    myScroll.on('scroll', function () {o
       var scint = this
       scroll.onscroll(scint)
       that.scrollFunc()
